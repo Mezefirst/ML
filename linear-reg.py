@@ -1,4 +1,16 @@
-# Code - Load depencencie
+#@title Copyright 2023 Google LLC. Double-click here for license information.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#1 Code - Load depencencie
 
 #general
 import io 
@@ -16,10 +28,10 @@ from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 import seaborn as sns
 
-# Load the dataset
+#2 Load the dataset
 chicago_taxi_dataset = pd.read_csv("https://download.mlcc.google.com/mledu-datasets/chicago_taxi_train.csv")
 
-# Code - Read dataset
+#3 Code - Read dataset
 
 # Updates datafrane to use specific columns
 training_df = chicago_taxi_dataset[['TRIP_MILES', 'TRIP_SECONDS', 'FARE', 'COMPANY', 'PAYMENT_TYPE', 'TIP_RATE']]
@@ -28,12 +40,12 @@ print('Read dataset completed successfully.')
 print('Total number of rows: {0}\n\n'.format(training_df.index))
 training_df.head(200)
 
-# Code - View dataset statistics
+#4 Code - View dataset statistics
 
 print('total nuber of rows: {0}\n\n'.format(len(training_df.index)))
 training_df.describe(include= 'all')
 
-# Double-click or run to view answers about dataset statistics
+#5 Double-click or run to view answers about dataset statistics
 
 answer = '''
 What is the maximun fare=                      Answer: $159.25
@@ -72,10 +84,10 @@ print("What is the most frequent payment type? \t\tAnswer: {type}".format(type =
 missing_values = training_df.isnull().sum().sum()
 print("Are any features missing data? \t\t\t\tAnswer:", "No" if missing_values == 0 else "Yes")
 
-# Code - View corralation matrix
+#6 Code - View corralation matrix
 training_df.corr(numeric_only=True)
 
-#@title Double-click to view answers about the correlation matrix
+#7 Double-click to view answers about the correlation matrix
 
 # Which feature correlates most strongly to the label FARE?
 # ---------------------------------------------------------
@@ -93,15 +105,15 @@ print(answer)
 answer = '''The feature with the weakest correlation to the FARE is TIP_RATE.'''
 print(answer)
 
-# Code - View pairplot
+#8 Code - View pairplot
 sns.pairplot(training_df, x_vars=["FARE", "TRIP_MILES", "TRIP_SECONDS"], y_vars=["FARE", "TRIP_MILES", "TRIP_SECONDS"])
 
-# Define plotting functions
+#9 Define plotting functions
 
 
 # Corrected make_plots function
 def make_plots(df, feature_names, label_name, model_output):
-    sample_size = 100
+    sample_size = 200
     random_sample = df.sample(n=sample_size).copy()
 
     print("Feature names:", feature_names)  # Debugging line
@@ -205,7 +217,7 @@ def model_info(feature_names, label_name, model_output):
 
 print("SUCCESS: defining plotting functions complete.")
 
-# Code - Define ML functions
+#10 Code - Define ML functions
 
 def build_model(my_learning_rate, num_features):
   """Create and compile a simple linear regression model."""
@@ -274,7 +286,7 @@ def run_experiment(df, feature_names, label_name, learning_rate, epochs, batch_s
 
 print("SUCCESS: defining linear regression functions complete.")
 
-# Code - Experiment 1
+#11 Code - Experiment 1
 
 # The following variables are the hyperparameters.
 learning_rate = 0.001
@@ -294,7 +306,7 @@ model_1 = run_experiment(training_df, feature_names, label, learning_rate, epoch
 
 # model_1 = run_experiment(training_df, features, label, learning_rate, epochs, batch_size)
 
-# Double-click to view answers for training model with one feature
+#12 Double-click to view answers for training model with one feature
 
 # How many epochs did it take to converge on the final model?
 # -----------------------------------------------------------------------------
@@ -318,7 +330,7 @@ It appears from the model plot that the model fits the sample data fairly well.
 '''
 print(answer)
 
-# Code - Experiment 2
+#13 Code - Experiment 2
 
 # The following variables are the hyperparameters.
 # TODO - Adjust these hyperparameters to see how they impact a training run.
@@ -341,7 +353,7 @@ feature_names = ['TRIP_MILES', 'TRIP_SECONDS']
 # Call run_experiment with the updated feature_names
 model_1 = run_experiment(training_df, feature_names, label, learning_rate, epochs, batch_size)
 
-# Double-click to view answers for hyperparameter experiments
+#14 Double-click to view answers for hyperparameter experiments
 
 # How did raising the learning rate impact your ability to train the model?
 # -----------------------------------------------------------------------------
@@ -375,7 +387,7 @@ model converge.
 '''
 print(answer)
 
-# Code - Experiment 3
+#15 Code - Experiment 3
 
 # The following variables are the hyperparameters.
 learning_rate = 0.001
@@ -397,7 +409,7 @@ feature_names = ['TRIP_MILES', 'TRIP_SECONDS']
 model_2 = run_experiment(training_df, feature_names, label, learning_rate, epochs, batch_size)
 
 
-# Double-click to view answers for training with two features
+#16 Double-click to view answers for training with two features
 
 # Does the model with two features produce better results than one using a
 # single feature?
@@ -444,7 +456,7 @@ roughly close to this formula.
 '''
 print(answer)
 
-# Code - Define functions to make predictions
+#17 Code - Define functions to make predictions
 def format_currency(x):
   return "${:.2f}".format(x)
 
@@ -478,12 +490,12 @@ def show_predictions(output):
   print(output)
   return
 
-# Code - Make predictions
+#18 Code - Make predictions
 
 output = predict_fare(model_2, training_df, features, label)
 show_predictions(output)
 
-# Double-click to view answers for validate model
+#19 Double-click to view answers for validate model
 
 # How close is the predicted value to the label value?
 # -----------------------------------------------------------------------------
