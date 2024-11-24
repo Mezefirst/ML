@@ -32,6 +32,7 @@ X = df[['time', 'force_change', 'temp_change']]
 y = df['clamping_force']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
+
 # Train the ML model
 model = RandomForestRegressor(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
@@ -40,6 +41,31 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 mae = mean_absolute_error(y_test, y_pred)
 print(f'Mean Absolute Error: {mae}')
+
+# Model selection 
+
+from sklearn.model_selection import GridSearchCV
+
+param_grid = {
+    'n_estimators': [50, 100, 200],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10]
+}
+
+grid_search = GridSearchCV(estimator=model, param_grid=param_grid, cv=5, scoring='neg_mean_absolute_error')
+grid_search.fit(X_train, y_train)
+best_model = grid_search.best_estimator_
+print("Best parameters:", grid_search.best_params_)
+
+# Ensemble methods 
+from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
+from sklearn.ensemble import VotingRegressor
+
+model1 = RandomForestRegressor(n_estimators=100, random_state=42)
+model2 = GradientBoostingRegressor(n_estimators=100, random_state=42)
+
+ensemble_model = VotingRegressor([('rf', model1), ('gb', model2)])
+ensemble_model.fit(X_train, y_train)
 
 # Ensuring model accuracy  
 from sklearn.model_selection import cross_val_score, KFold
@@ -56,6 +82,16 @@ r2_scores = cross_val_score(model, X, y, scoring='r2', cv=kf)
 print(f'MAE: {np.mean(-mae_scores)}')
 print(f'RMSE: {np.mean(-rmse_scores)}')
 print(f'R-squared: {np.mean(r2_scores)}')
+
+# Regularization 
+from sklearn.linear_model import Lasso
+
+lasso = Lasso(alpha=0.1)
+lasso.fit(X_train, y_train)
+y_pred = lasso.predict(X_test)
+mae = mean_absolute_error(y_test, y_pred)
+print("MAE with Lasso:", mae)
+
 
 # Residual analysis
 y_pred = model.predict(X_test)
